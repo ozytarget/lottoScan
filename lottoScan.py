@@ -496,7 +496,7 @@ def main():
     </style>
     """, unsafe_allow_html=True)
 
-    st.title("🎲 Lottery Scanner – Mega Millions & Powerball")
+    st.title("🎲 Lottery Scanner ")
     st.caption(
         "Statistical scanner (non-predictive). Analyzes recent history "
         "and suggests combinations based on dispersion and frequency patterns."
