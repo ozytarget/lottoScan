@@ -1,13 +1,16 @@
 [client]
-showErrorDetails = true
+showErrorDetails = false
 toolbarMode = "minimal"
+theme.base = "dark"
 
 [logger]
-level = "info"
+level = "warning"
 
 [server]
 headless = true
 enableCORS = false
 enableXsrfProtection = false
+maxUploadSize = 200
+timeout = 300
 maxUploadSize = 200
 port = 8501
