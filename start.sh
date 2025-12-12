@@ -1,0 +1,2 @@
+#!/bin/bash
+streamlit run lottoScan.py --server.port=$PORT --server.address=0.0.0.0
