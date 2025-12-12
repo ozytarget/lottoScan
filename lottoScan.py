@@ -284,12 +284,119 @@ def main():
         initial_sidebar_state="collapsed"
     )
 
-    # Custom CSS for casino-like styling
+    # Custom CSS for casino-like styling + mobile responsive
     st.markdown("""
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         .main {
             background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
         }
+        
+        /* Mobile first - optimize for small screens */
+        @media (max-width: 600px) {
+            .stApp {
+                padding: 0 8px !important;
+            }
+            
+            h1 {
+                font-size: 32px !important;
+                margin-bottom: 8px !important;
+            }
+            
+            h2 {
+                font-size: 20px !important;
+                margin-top: 12px !important;
+            }
+            
+            h3 {
+                font-size: 16px !important;
+            }
+            
+            [data-testid="column"] {
+                padding: 4px !important;
+            }
+            
+            .ball {
+                width: 45px !important;
+                height: 45px !important;
+                margin: 4px !important;
+                font-size: 16px !important;
+                line-height: 45px !important;
+            }
+            
+            .special-ball {
+                width: 55px !important;
+                height: 55px !important;
+                margin: 6px !important;
+                font-size: 20px !important;
+                line-height: 55px !important;
+            }
+            
+            .combo-card {
+                padding: 12px !important;
+                border-radius: 12px !important;
+                margin: 8px 0 !important;
+            }
+            
+            .stMetric {
+                padding: 12px !important;
+            }
+            
+            .stDataFrame {
+                font-size: 12px !important;
+            }
+        }
+        
+        /* Tablet - 600px to 1200px */
+        @media (min-width: 600px) and (max-width: 1200px) {
+            h1 {
+                font-size: 40px !important;
+            }
+            
+            .ball {
+                width: 55px !important;
+                height: 55px !important;
+                font-size: 18px !important;
+                line-height: 55px !important;
+            }
+            
+            .special-ball {
+                width: 65px !important;
+                height: 65px !important;
+                font-size: 22px !important;
+                line-height: 65px !important;
+            }
+        }
+        
+        /* Desktop - 1200px+ */
+        @media (min-width: 1200px) {
+            h1 {
+                font-size: 48px !important;
+            }
+            
+            .ball {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+                line-height: 60px;
+            }
+            
+            .special-ball {
+                width: 70px;
+                height: 70px;
+                font-size: 28px;
+                line-height: 70px;
+            }
+        }
+        
+        /* Common styles for all screen sizes */
         .stMetric {
             background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
             padding: 20px;
@@ -297,19 +404,57 @@ def main():
             box-shadow: 0 8px 32px rgba(255, 107, 107, 0.3);
             color: white;
         }
+        
         .stButton>button {
             background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
             color: #1a1a2e;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 16px;
             border: none;
             box-shadow: 0 8px 32px rgba(255, 215, 0, 0.4);
             transition: all 0.3s;
+            width: 100%;
         }
+        
         .stButton>button:hover {
             transform: scale(1.05);
             box-shadow: 0 12px 40px rgba(255, 215, 0, 0.6);
         }
+        
+        .ball {
+            display: inline-block;
+            background: radial-gradient(circle at 30% 30%, #FFD700, #FFA500);
+            border-radius: 50%;
+            font-weight: bold;
+            color: #1a1a2e;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4), inset -2px -2px 5px rgba(0,0,0,0.3);
+            border: 2px solid #FFB300;
+            transition: all 0.2s ease;
+        }
+        
+        .ball:hover {
+            transform: scale(1.15);
+            box-shadow: 0 12px 30px rgba(255, 215, 0, 0.6), inset -2px -2px 5px rgba(0,0,0,0.3);
+        }
+        
+        .special-ball {
+            display: inline-block;
+            background: radial-gradient(circle at 30% 30%, #FF1493, #FF69B4);
+            border-radius: 50%;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            box-shadow: 0 12px 28px rgba(255, 20, 147, 0.5), inset -2px -2px 5px rgba(0,0,0,0.3);
+            border: 2px solid #FF1493;
+            transition: all 0.2s ease;
+        }
+        
+        .special-ball:hover {
+            transform: scale(1.15);
+            box-shadow: 0 16px 40px rgba(255, 20, 147, 0.7), inset -2px -2px 5px rgba(0,0,0,0.3);
+        }
+        
         .combo-card {
             background: linear-gradient(135deg, #2d3561 0%, #1a1a2e 100%);
             border: 3px solid #FFD700;
@@ -317,52 +462,36 @@ def main():
             padding: 25px;
             box-shadow: 0 12px 48px rgba(255, 215, 0, 0.3);
             text-align: center;
+            transition: all 0.3s ease;
         }
-        .ball {
-            display: inline-block;
-            width: 60px;
-            height: 60px;
-            background: radial-gradient(circle at 30% 30%, #FFD700, #FFA500);
-            border-radius: 50%;
-            margin: 8px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #1a1a2e;
-            line-height: 60px;
-            text-align: center;
-            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4), inset -2px -2px 5px rgba(0,0,0,0.3);
-            border: 2px solid #FFB300;
+        
+        .combo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 60px rgba(255, 215, 0, 0.5);
         }
-        .special-ball {
-            display: inline-block;
-            width: 70px;
-            height: 70px;
-            background: radial-gradient(circle at 30% 30%, #FF1493, #FF69B4);
-            border-radius: 50%;
-            margin: 10px;
-            font-size: 28px;
-            font-weight: bold;
-            color: white;
-            line-height: 70px;
-            text-align: center;
-            box-shadow: 0 12px 28px rgba(255, 20, 147, 0.5), inset -2px -2px 5px rgba(0,0,0,0.3);
-            border: 2px solid #FF1493;
-        }
+        
         h1 {
             color: #FFD700;
             text-shadow: 0 0 30px rgba(255, 215, 0, 0.6), 0 0 60px rgba(255, 107, 157, 0.3);
-            font-size: 48px !important;
         }
+        
         h2 {
             color: #FF6B9D;
             text-shadow: 0 0 15px rgba(255, 107, 157, 0.3);
         }
+        
         h3 {
             color: #FFD700 !important;
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
         }
+        
         .stSubheader {
             color: #FFD700 !important;
+        }
+        
+        .stDataFrame {
+            width: 100%;
+            overflow-x: auto !important;
         }
     </style>
     """, unsafe_allow_html=True)
@@ -374,34 +503,41 @@ def main():
     )
 
     # =====================================
-    # Controls in a compact top row
+    # Controls - Responsive layout
     # =====================================
-    ctrl_col1, ctrl_col2, ctrl_col3 = st.columns(3)
+    # Mobile: Stack vertically, Desktop: 3 columns
+    import streamlit as st
     
-    with ctrl_col1:
-        game_choice = st.selectbox(
-            "Game",
-            options=["mega", "power"],
-            format_func=lambda x: "Mega Millions" if x == "mega" else "Powerball",
-        )
+    # Detect screen size (rough estimate based on Streamlit's default widths)
+    ctrl_cols = st.columns(1)  # Default to full width for controls
     
-    with ctrl_col2:
-        days_back = st.slider(
-            "Days to analyze",
-            min_value=15,
-            max_value=180,
-            value=60,
-            step=5,
-        )
-    
-    with ctrl_col3:
-        n_combos = st.slider(
-            "Combinations",
-            min_value=3,
-            max_value=20,
-            value=8,
-            step=1,
-        )
+    with ctrl_cols[0]:
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            game_choice = st.selectbox(
+                "Game",
+                options=["mega", "power"],
+                format_func=lambda x: "Mega Millions" if x == "mega" else "Powerball",
+            )
+        
+        with col2:
+            days_back = st.slider(
+                "Days to analyze",
+                min_value=15,
+                max_value=180,
+                value=60,
+                step=5,
+            )
+        
+        with col3:
+            n_combos = st.slider(
+                "Combinations",
+                min_value=3,
+                max_value=20,
+                value=8,
+                step=1,
+            )
     
     cfg = GAMES[game_choice]
     st.info(
@@ -456,22 +592,31 @@ def main():
     st.divider()
 
     # =====================================
-    # Stats cards - Top row
+    # Stats cards - Responsive grid
     # =====================================
-    col1, col2, col3, col4 = st.columns(4)
+    # Mobile: 2 columns, Desktop: 4 columns
+    metrics_cols = st.columns(2) if st.session_state.get('is_mobile', False) else st.columns(4)
     
-    with col1:
+    with metrics_cols[0]:
         st.metric("📊 Draws", len(df))
     
-    with col2:
+    # For 2-column layout, repeat pattern
+    with metrics_cols[1]:
         st.metric("📅 From", df['date'].max().strftime('%m/%d/%Y'))
     
-    with col3:
-        st.metric("📅 To", df['date'].min().strftime('%m/%d/%Y'))
-    
-    with col4:
-        most_common = main_counter.most_common(1)[0][0] if main_counter else "—"
-        st.metric("🔥 Top Number", f"{int(most_common):02d}" if most_common != "—" else "—")
+    if len(metrics_cols) == 2:
+        metrics_cols = st.columns(2)
+        with metrics_cols[0]:
+            st.metric("📅 To", df['date'].min().strftime('%m/%d/%Y'))
+        with metrics_cols[1]:
+            most_common = main_counter.most_common(1)[0][0] if main_counter else "—"
+            st.metric("🔥 Top Number", f"{int(most_common):02d}" if most_common != "—" else "—")
+    else:
+        with metrics_cols[2]:
+            st.metric("📅 To", df['date'].min().strftime('%m/%d/%Y'))
+        with metrics_cols[3]:
+            most_common = main_counter.most_common(1)[0][0] if main_counter else "—"
+            st.metric("🔥 Top Number", f"{int(most_common):02d}" if most_common != "—" else "—")
 
     st.divider()
 
@@ -485,23 +630,24 @@ def main():
         st.stop()
 
     # =====================================
-    # Suggested Combinations - Clean Cards
+    # Suggested Combinations - Responsive Cards
     # =====================================
     st.subheader(f"🎯 {n_combos} Suggested Combinations")
     
-    # Create a nice grid of combinations
-    cols = st.columns(min(4, n_combos))
+    # Responsive grid: 2 on mobile, 4 on desktop
+    n_cols = 2 if st.session_state.get('is_mobile', False) else min(4, n_combos)
+    cols = st.columns(n_cols)
     
     for idx, (main_nums, special) in enumerate(combos):
         with cols[idx % len(cols)]:
             st.markdown(f"""
             <div class="combo-card">
-                <h3 style="margin-top: 0;">Combo #{idx + 1}</h3>
-                <div style="margin: 15px 0;">
+                <h3 style="margin-top: 0;">#{idx + 1}</h3>
+                <div style="margin: 10px 0; text-align: center;">
                     {''.join([f'<span class="ball">{n:02d}</span>' for n in main_nums])}
                 </div>
-                <div style="margin-top: 15px; border-top: 2px dashed #FFD700; padding-top: 15px;">
-                    <div style="color: #FF6B9D; font-size: 14px; margin-bottom: 8px;">Special Ball</div>
+                <div style="margin-top: 12px; border-top: 2px dashed #FFD700; padding-top: 12px;">
+                    <div style="color: #FF6B9D; font-size: 12px; margin-bottom: 6px;">Special</div>
                     <span class="special-ball">{special:02d}</span>
                 </div>
             </div>
@@ -518,13 +664,14 @@ def main():
     st.divider()
 
     # =====================================
-    # Números menos frecuentes (al final)
+    # Least Frequent Numbers - Responsive
     # =====================================
     st.subheader("📉 Least Frequent Numbers")
     
-    col_less_main, col_less_spec = st.columns(2)
+    # Responsive columns: 1 on mobile, 2 on desktop
+    least_cols = st.columns(1) if st.session_state.get('is_mobile', False) else st.columns(2)
     
-    with col_less_main:
+    with least_cols[0]:
         st.markdown("**Main Numbers:**")
         if least_frequent_main:
             for num, freq in least_frequent_main:
@@ -532,7 +679,15 @@ def main():
         else:
             st.markdown("No data")
     
-    with col_less_spec:
+    if len(least_cols) == 2:
+        with least_cols[1]:
+            st.markdown("**Special Numbers:**")
+            if least_frequent_special:
+                for num, freq in least_frequent_special:
+                    st.markdown(f"- **{num:02d}** ({int(freq)} times)")
+            else:
+                st.markdown("No data")
+    else:
         st.markdown("**Special Numbers:**")
         if least_frequent_special:
             for num, freq in least_frequent_special:
