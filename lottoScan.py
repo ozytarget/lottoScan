@@ -505,39 +505,32 @@ def main():
     # =====================================
     # Controls - Responsive layout
     # =====================================
-    # Mobile: Stack vertically, Desktop: 3 columns
-    import streamlit as st
+    col1, col2, col3 = st.columns(3)
     
-    # Detect screen size (rough estimate based on Streamlit's default widths)
-    ctrl_cols = st.columns(1)  # Default to full width for controls
+    with col1:
+        game_choice = st.selectbox(
+            "Game",
+            options=["mega", "power"],
+            format_func=lambda x: "Mega Millions" if x == "mega" else "Powerball",
+        )
     
-    with ctrl_cols[0]:
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            game_choice = st.selectbox(
-                "Game",
-                options=["mega", "power"],
-                format_func=lambda x: "Mega Millions" if x == "mega" else "Powerball",
-            )
-        
-        with col2:
-            days_back = st.slider(
-                "Days to analyze",
-                min_value=15,
-                max_value=180,
-                value=60,
-                step=5,
-            )
-        
-        with col3:
-            n_combos = st.slider(
-                "Combinations",
-                min_value=3,
-                max_value=20,
-                value=8,
-                step=1,
-            )
+    with col2:
+        days_back = st.slider(
+            "Days to analyze",
+            min_value=15,
+            max_value=180,
+            value=60,
+            step=5,
+        )
+    
+    with col3:
+        n_combos = st.slider(
+            "Combinations",
+            min_value=3,
+            max_value=20,
+            value=8,
+            step=1,
+        )
     
     cfg = GAMES[game_choice]
     st.info(
@@ -592,31 +585,22 @@ def main():
     st.divider()
 
     # =====================================
-    # Stats cards - Responsive grid
+    # Stats cards - Simple 4-column layout
     # =====================================
-    # Mobile: 2 columns, Desktop: 4 columns
-    metrics_cols = st.columns(2) if st.session_state.get('is_mobile', False) else st.columns(4)
+    col1, col2, col3, col4 = st.columns(4)
     
-    with metrics_cols[0]:
+    with col1:
         st.metric("📊 Draws", len(df))
     
-    # For 2-column layout, repeat pattern
-    with metrics_cols[1]:
+    with col2:
         st.metric("📅 From", df['date'].max().strftime('%m/%d/%Y'))
     
-    if len(metrics_cols) == 2:
-        metrics_cols = st.columns(2)
-        with metrics_cols[0]:
-            st.metric("📅 To", df['date'].min().strftime('%m/%d/%Y'))
-        with metrics_cols[1]:
-            most_common = main_counter.most_common(1)[0][0] if main_counter else "—"
-            st.metric("🔥 Top Number", f"{int(most_common):02d}" if most_common != "—" else "—")
-    else:
-        with metrics_cols[2]:
-            st.metric("📅 To", df['date'].min().strftime('%m/%d/%Y'))
-        with metrics_cols[3]:
-            most_common = main_counter.most_common(1)[0][0] if main_counter else "—"
-            st.metric("🔥 Top Number", f"{int(most_common):02d}" if most_common != "—" else "—")
+    with col3:
+        st.metric("📅 To", df['date'].min().strftime('%m/%d/%Y'))
+    
+    with col4:
+        most_common = main_counter.most_common(1)[0][0] if main_counter else "—"
+        st.metric("🔥 Top Number", f"{int(most_common):02d}" if most_common != "—" else "—")
 
     st.divider()
 
@@ -628,15 +612,13 @@ def main():
             "No se pudieron generar combinaciones. Prueba reduciendo el número o cambiando el rango."
         )
         st.stop()
-
     # =====================================
-    # Suggested Combinations - Responsive Cards
+    # Suggested Combinations - Clean Cards
     # =====================================
     st.subheader(f"🎯 {n_combos} Suggested Combinations")
     
-    # Responsive grid: 2 on mobile, 4 on desktop
-    n_cols = 2 if st.session_state.get('is_mobile', False) else min(4, n_combos)
-    cols = st.columns(n_cols)
+    # Create a nice grid of combinations
+    cols = st.columns(min(4, n_combos))
     
     for idx, (main_nums, special) in enumerate(combos):
         with cols[idx % len(cols)]:
@@ -664,14 +646,13 @@ def main():
     st.divider()
 
     # =====================================
-    # Least Frequent Numbers - Responsive
+    # Least Frequent Numbers
     # =====================================
     st.subheader("📉 Least Frequent Numbers")
     
-    # Responsive columns: 1 on mobile, 2 on desktop
-    least_cols = st.columns(1) if st.session_state.get('is_mobile', False) else st.columns(2)
+    col_less_main, col_less_spec = st.columns(2)
     
-    with least_cols[0]:
+    with col_less_main:
         st.markdown("**Main Numbers:**")
         if least_frequent_main:
             for num, freq in least_frequent_main:
@@ -679,15 +660,7 @@ def main():
         else:
             st.markdown("No data")
     
-    if len(least_cols) == 2:
-        with least_cols[1]:
-            st.markdown("**Special Numbers:**")
-            if least_frequent_special:
-                for num, freq in least_frequent_special:
-                    st.markdown(f"- **{num:02d}** ({int(freq)} times)")
-            else:
-                st.markdown("No data")
-    else:
+    with col_less_spec:
         st.markdown("**Special Numbers:**")
         if least_frequent_special:
             for num, freq in least_frequent_special:
