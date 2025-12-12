@@ -503,6 +503,42 @@ def main():
     )
 
     # =====================================
+    # Luck Check (Humorous Section)
+    # =====================================
+    import hashlib
+    
+    # Generate a "luck score" based on current date (changes daily)
+    today = datetime.now().strftime("%Y-%m-%d")
+    luck_hash = int(hashlib.md5(today.encode()).hexdigest(), 16) % 100
+    
+    # Fun luck messages
+    if luck_hash < 10:
+        luck_msg = "🚨 **SALADO LEVEL: EXTREME** 🚨 | Eres tan mala suerte que los boletos te evitan. Mejor no vengas. 😂"
+        luck_color = "🔴"
+    elif luck_hash < 25:
+        luck_msg = "⚠️ **CURSED MODE ACTIVATED** ⚠️ | Hasta el universo dice 'no por hoy'. Considera quedarte en cama."
+        luck_color = "🟠"
+    elif luck_hash < 50:
+        luck_msg = "😐 **Neutrally Unfortunate** | Ni bueno ni malo... solo mediocre. Como la mayoría."
+        luck_color = "🟡"
+    elif luck_hash < 75:
+        luck_msg = "✨ **Vibes are decent today** ✨ | La suerte no es tu enemigo... todavía."
+        luck_color = "🟢"
+    else:
+        luck_msg = "🌟 **BLESSED BY THE LOTTERY GODS** 🌟 | Hoy es tu día. Ve y compra todos los boletos. (Aviso: esto es broma)"
+        luck_color = "🟢"
+    
+    with st.container():
+        st.markdown(f"""
+        <div style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 20, 147, 0.1)); 
+                    border: 2px solid #FFD700; border-radius: 10px; padding: 15px; margin-bottom: 20px; text-align: center;">
+            <h3 style="margin: 0; color: #FFD700;">☠️ TODAY'S LUCK STATUS ☠️</h3>
+            <p style="font-size: 18px; margin: 10px 0; color: #FF6B9D;"><b>{luck_msg}</b></p>
+            <small style="color: #999;">*Generated daily. If you're actually cursed, we can't help you.* 😅</small>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # =====================================
     # Controls - Responsive layout
     # =====================================
     col1, col2, col3 = st.columns(3)
@@ -669,10 +705,37 @@ def main():
             st.markdown("No data")
     
     st.divider()
-    st.caption(
-        "📌 Statistical scanner based on frequencies and dispersion patterns. "
-        "Each combination has equal mathematical probability."
-    )
+    
+    # =====================================
+    # Final Disclaimer (with humor)
+    # =====================================
+    col_warning1, col_warning2, col_warning3 = st.columns(3)
+    
+    with col_warning1:
+        st.markdown("""
+        <div style="text-align: center; padding: 10px; background: rgba(255, 107, 157, 0.1); border-radius: 8px;">
+            <p style="margin: 0; font-size: 14px;">
+            ⚠️ **If you're salado (cursed):**<br>
+            Just close this app and walk away slowly. 🚶
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col_warning2:
+        st.caption(
+            "📌 Statistical scanner based on frequencies and dispersion patterns. "
+            "Each combination has equal mathematical probability."
+        )
+    
+    with col_warning3:
+        st.markdown("""
+        <div style="text-align: center; padding: 10px; background: rgba(255, 215, 0, 0.1); border-radius: 8px;">
+            <p style="margin: 0; font-size: 14px;">
+            💰 **Disclaimer:**<br>
+            We accept no responsibility if you lose. We were just having fun. 😄
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
